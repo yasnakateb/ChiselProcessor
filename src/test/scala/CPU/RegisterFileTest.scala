@@ -21,7 +21,7 @@ class RegisterFileTest extends AnyFlatSpec with ChiselScalatestTester {
             dut.io.src1.poke(src1.U)
             dut.clock.step(1)
             dut.clock.step(1)
-            println("Src1 is: " + dut.io.rd1.peek().toString)
+            println("Src1: " + dut.io.rd1.peek().toString)
         }
     } 
 }
