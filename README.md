@@ -6,5 +6,9 @@
  - ⭕ Add Control Unit
  - ✅ Add Register File
  - ⭕ Add Memory
- - ✅ Add register
- - ✅ Add register with enable
+ - ✅ Add Register
+ - ✅ Add Register with enable
+ - ⭕ Add Control Branch
+ - ✅ Add Mux
+ - ⭕ Add Shifter
+ - ⭕ Add Sign Extention
