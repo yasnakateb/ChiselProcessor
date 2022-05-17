@@ -1,0 +1,6 @@
+project/
+target/
+.vscode/
+.metals/
+.DS_Store
+test_run_dir/
