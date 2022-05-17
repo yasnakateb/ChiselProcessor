@@ -12,3 +12,9 @@ register-file:
 
 register-file-test:
 	$(SBT) "testOnly CPU.RegisterFileTest"
+
+register:
+	$(SBT) "runMain CPU.RegisterMain"
+
+register-test:
+	$(SBT) "testOnly CPU.RegisterTest"
