@@ -180,7 +180,6 @@ class ControlUnit extends Module {
             stateReg := STATE_0 
 
         }
-
     }
 
     val ALUOp = Wire(UInt(2.W))
