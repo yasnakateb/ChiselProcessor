@@ -5,7 +5,7 @@
  - ✅ Add ALU
  - ✅ Add Control Unit
  - ✅ Add Register File
- - ⭕ Add Memory
+ - ✅ Add Memory
  - ✅ Add Register
  - ✅ Add Register with enable
  - ⭕ Add Control Branch
