@@ -42,3 +42,9 @@ control-branch:
 
 control-branch-test:
 	$(SBT) "testOnly CPU.ControlBranchTest"
+
+shifter:
+	$(SBT) "runMain CPU.ShifterMain"
+
+shifter-test:
+	$(SBT) "testOnly CPU.ShifterTest"
