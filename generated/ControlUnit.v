@@ -4,20 +4,20 @@ module ControlUnit(
   input  [5:0] io_instr_Opcode,
   input  [5:0] io_instr_Function,
   input        io_over_flow,
-  output [1:0] io_sig_MemtoReg,
-  output       io_sig_RegDst,
-  output       io_sig_IorD,
-  output [1:0] io_sig_PCSrc,
-  output [1:0] io_sig_ALUSrcB,
-  output       io_sig_ALUSrcA,
-  output       io_sig_IRWrite,
-  output       io_sig_MemWrite,
-  output       io_sig_PCWrite,
-  output       io_sig_Branch,
-  output       io_sig_RegWrite,
-  output       io_sig_IntCause,
-  output       io_sig_CauseWrite,
-  output       io_sig_EPCWrite,
+  output [1:0] io_MemtoReg,
+  output       io_RegDst,
+  output       io_IorD,
+  output [1:0] io_PCSrc,
+  output [1:0] io_ALUSrcB,
+  output       io_ALUSrcA,
+  output       io_IRWrite,
+  output       io_MemWrite,
+  output       io_PCWrite,
+  output       io_Branch,
+  output       io_RegWrite,
+  output       io_IntCause,
+  output       io_CauseWrite,
+  output       io_EPCWrite,
   output [3:0] io_state,
   output [2:0] io_alu_Control
 );
@@ -49,52 +49,52 @@ module ControlUnit(
   wire [3:0] _GEN_19 = 4'h5 == stateReg ? 4'h0 : _GEN_18; // @[ControlUnit.scala 131:22 68:23]
   wire [3:0] _GEN_20 = 4'h4 == stateReg ? 4'h0 : _GEN_19; // @[ControlUnit.scala 126:22 68:23]
   wire [3:0] _GEN_21 = 4'h3 == stateReg ? 4'h4 : _GEN_20; // @[ControlUnit.scala 121:22 68:23]
-  wire  _io_sig_ALUSrcA_T = stateReg == 4'h9; // @[ControlUnit.scala 192:37]
-  wire  _io_sig_ALUSrcA_T_1 = stateReg == 4'h8; // @[ControlUnit.scala 192:63]
-  wire  _io_sig_ALUSrcA_T_3 = stateReg == 4'h6; // @[ControlUnit.scala 192:89]
-  wire  _io_sig_ALUSrcA_T_5 = stateReg == 4'h2; // @[ControlUnit.scala 192:115]
-  wire  _io_sig_ALUSrcB_T = stateReg == 4'h0; // @[ControlUnit.scala 194:61]
-  wire  _io_sig_ALUSrcB_T_1 = stateReg == 4'h1; // @[ControlUnit.scala 194:101]
-  wire  _io_sig_ALUSrcB_T_4 = _io_sig_ALUSrcA_T | _io_sig_ALUSrcA_T_5; // @[ControlUnit.scala 194:155]
-  wire [1:0] _io_sig_ALUSrcB_T_5 = _io_sig_ALUSrcB_T_4 ? 2'h2 : 2'h0; // @[Mux.scala 101:16]
-  wire [1:0] _io_sig_ALUSrcB_T_6 = _io_sig_ALUSrcB_T_1 ? 2'h3 : _io_sig_ALUSrcB_T_5; // @[Mux.scala 101:16]
-  wire [1:0] _alu_Op_T_2 = _io_sig_ALUSrcA_T_3 ? 2'h2 : 2'h0; // @[Mux.scala 101:16]
-  wire [1:0] alu_Op = _io_sig_ALUSrcA_T_1 ? 2'h1 : _alu_Op_T_2; // @[Mux.scala 101:16]
-  wire  _io_sig_PCSrc_T = stateReg == 4'hc; // @[ControlUnit.scala 198:60]
-  wire  _io_sig_PCSrc_T_1 = stateReg == 4'hd; // @[ControlUnit.scala 198:87]
-  wire  _io_sig_PCSrc_T_2 = stateReg == 4'hc | stateReg == 4'hd; // @[ControlUnit.scala 198:74]
-  wire  _io_sig_PCSrc_T_3 = stateReg == 4'hb; // @[ControlUnit.scala 198:130]
-  wire [1:0] _io_sig_PCSrc_T_5 = _io_sig_ALUSrcA_T_1 ? 2'h1 : 2'h0; // @[Mux.scala 101:16]
-  wire [1:0] _io_sig_PCSrc_T_6 = _io_sig_PCSrc_T_3 ? 2'h2 : _io_sig_PCSrc_T_5; // @[Mux.scala 101:16]
-  wire  _io_sig_RegDst_T = stateReg == 4'h7; // @[ControlUnit.scala 206:35]
-  wire  _io_sig_MemtoReg_T = stateReg == 4'h4; // @[ControlUnit.scala 208:62]
-  wire  _io_sig_MemtoReg_T_1 = stateReg == 4'he; // @[ControlUnit.scala 208:103]
-  wire [1:0] _io_sig_MemtoReg_T_2 = _io_sig_MemtoReg_T_1 ? 2'h2 : 2'h0; // @[Mux.scala 101:16]
-  wire [1:0] _GEN_34 = {{1'd0}, alu_Op[1]}; // @[ControlUnit.scala 231:27]
+  wire  _io_ALUSrcA_T = stateReg == 4'h9; // @[ControlUnit.scala 192:33]
+  wire  _io_ALUSrcA_T_1 = stateReg == 4'h8; // @[ControlUnit.scala 192:59]
+  wire  _io_ALUSrcA_T_3 = stateReg == 4'h6; // @[ControlUnit.scala 192:85]
+  wire  _io_ALUSrcA_T_5 = stateReg == 4'h2; // @[ControlUnit.scala 192:111]
+  wire  _io_ALUSrcB_T = stateReg == 4'h0; // @[ControlUnit.scala 194:57]
+  wire  _io_ALUSrcB_T_1 = stateReg == 4'h1; // @[ControlUnit.scala 194:97]
+  wire  _io_ALUSrcB_T_4 = _io_ALUSrcA_T | _io_ALUSrcA_T_5; // @[ControlUnit.scala 194:151]
+  wire [1:0] _io_ALUSrcB_T_5 = _io_ALUSrcB_T_4 ? 2'h2 : 2'h0; // @[Mux.scala 101:16]
+  wire [1:0] _io_ALUSrcB_T_6 = _io_ALUSrcB_T_1 ? 2'h3 : _io_ALUSrcB_T_5; // @[Mux.scala 101:16]
+  wire [1:0] _ALUOp_T_2 = _io_ALUSrcA_T_3 ? 2'h2 : 2'h0; // @[Mux.scala 101:16]
+  wire [1:0] ALUOp = _io_ALUSrcA_T_1 ? 2'h1 : _ALUOp_T_2; // @[Mux.scala 101:16]
+  wire  _io_PCSrc_T = stateReg == 4'hc; // @[ControlUnit.scala 198:56]
+  wire  _io_PCSrc_T_1 = stateReg == 4'hd; // @[ControlUnit.scala 198:83]
+  wire  _io_PCSrc_T_2 = stateReg == 4'hc | stateReg == 4'hd; // @[ControlUnit.scala 198:70]
+  wire  _io_PCSrc_T_3 = stateReg == 4'hb; // @[ControlUnit.scala 198:126]
+  wire [1:0] _io_PCSrc_T_5 = _io_ALUSrcA_T_1 ? 2'h1 : 2'h0; // @[Mux.scala 101:16]
+  wire [1:0] _io_PCSrc_T_6 = _io_PCSrc_T_3 ? 2'h2 : _io_PCSrc_T_5; // @[Mux.scala 101:16]
+  wire  _io_RegDst_T = stateReg == 4'h7; // @[ControlUnit.scala 206:31]
+  wire  _io_MemtoReg_T = stateReg == 4'h4; // @[ControlUnit.scala 208:58]
+  wire  _io_MemtoReg_T_1 = stateReg == 4'he; // @[ControlUnit.scala 208:99]
+  wire [1:0] _io_MemtoReg_T_2 = _io_MemtoReg_T_1 ? 2'h2 : 2'h0; // @[Mux.scala 101:16]
+  wire [1:0] _GEN_34 = {{1'd0}, ALUOp[1]}; // @[ControlUnit.scala 231:26]
   wire [2:0] _GEN_25 = 6'h26 == io_instr_Function ? 3'h5 : 3'h0; // @[ControlUnit.scala 221:20 233:34 261:32]
   wire [2:0] _GEN_26 = 6'h2a == io_instr_Function ? 3'h7 : _GEN_25; // @[ControlUnit.scala 233:34 256:32]
   wire [2:0] _GEN_27 = 6'h25 == io_instr_Function ? 3'h1 : _GEN_26; // @[ControlUnit.scala 233:34 251:32]
   wire [2:0] _GEN_28 = 6'h24 == io_instr_Function ? 3'h0 : _GEN_27; // @[ControlUnit.scala 233:34 246:32]
   wire [2:0] _GEN_29 = 6'h22 == io_instr_Function ? 3'h6 : _GEN_28; // @[ControlUnit.scala 233:34 241:32]
   wire [2:0] _GEN_30 = 6'h20 == io_instr_Function ? 3'h2 : _GEN_29; // @[ControlUnit.scala 233:34 236:32]
-  wire [2:0] _GEN_31 = _GEN_34 == 2'h2 ? _GEN_30 : 3'h0; // @[ControlUnit.scala 221:20 231:36]
-  wire [2:0] _GEN_32 = ~alu_Op[0] ? 3'h6 : _GEN_31; // @[ControlUnit.scala 227:36 229:24]
-  assign io_sig_MemtoReg = _io_sig_MemtoReg_T ? 2'h1 : _io_sig_MemtoReg_T_2; // @[Mux.scala 101:16]
-  assign io_sig_RegDst = stateReg == 4'h7; // @[ControlUnit.scala 206:35]
-  assign io_sig_IorD = stateReg == 4'h5 | stateReg == 4'h3; // @[ControlUnit.scala 190:47]
-  assign io_sig_PCSrc = _io_sig_PCSrc_T_2 ? 2'h3 : _io_sig_PCSrc_T_6; // @[Mux.scala 101:16]
-  assign io_sig_ALUSrcB = _io_sig_ALUSrcB_T ? 2'h1 : _io_sig_ALUSrcB_T_6; // @[Mux.scala 101:16]
-  assign io_sig_ALUSrcA = stateReg == 4'h9 | stateReg == 4'h8 | stateReg == 4'h6 | stateReg == 4'h2; // @[ControlUnit.scala 192:102]
-  assign io_sig_IRWrite = stateReg == 4'h0; // @[ControlUnit.scala 200:36]
-  assign io_sig_MemWrite = stateReg == 4'h5; // @[ControlUnit.scala 212:37]
-  assign io_sig_PCWrite = _io_sig_ALUSrcB_T | _io_sig_PCSrc_T_3 | _io_sig_PCSrc_T | _io_sig_PCSrc_T_1; // @[ControlUnit.scala 202:124]
-  assign io_sig_Branch = stateReg == 4'h8; // @[ControlUnit.scala 204:35]
-  assign io_sig_RegWrite = _io_sig_MemtoReg_T | _io_sig_RegDst_T | stateReg == 4'ha | _io_sig_MemtoReg_T_1; // @[ControlUnit.scala 210:124]
-  assign io_sig_IntCause = stateReg == 4'hc; // @[ControlUnit.scala 214:37]
-  assign io_sig_CauseWrite = _io_sig_PCSrc_T | _io_sig_PCSrc_T_1; // @[ControlUnit.scala 216:54]
-  assign io_sig_EPCWrite = _io_sig_PCSrc_T_3 | _io_sig_PCSrc_T; // @[ControlUnit.scala 218:52]
+  wire [2:0] _GEN_31 = _GEN_34 == 2'h2 ? _GEN_30 : 3'h0; // @[ControlUnit.scala 221:20 231:35]
+  wire [2:0] _GEN_32 = ~ALUOp[0] ? 3'h6 : _GEN_31; // @[ControlUnit.scala 227:35 229:24]
+  assign io_MemtoReg = _io_MemtoReg_T ? 2'h1 : _io_MemtoReg_T_2; // @[Mux.scala 101:16]
+  assign io_RegDst = stateReg == 4'h7; // @[ControlUnit.scala 206:31]
+  assign io_IorD = stateReg == 4'h5 | stateReg == 4'h3; // @[ControlUnit.scala 190:43]
+  assign io_PCSrc = _io_PCSrc_T_2 ? 2'h3 : _io_PCSrc_T_6; // @[Mux.scala 101:16]
+  assign io_ALUSrcB = _io_ALUSrcB_T ? 2'h1 : _io_ALUSrcB_T_6; // @[Mux.scala 101:16]
+  assign io_ALUSrcA = stateReg == 4'h9 | stateReg == 4'h8 | stateReg == 4'h6 | stateReg == 4'h2; // @[ControlUnit.scala 192:98]
+  assign io_IRWrite = stateReg == 4'h0; // @[ControlUnit.scala 200:32]
+  assign io_MemWrite = stateReg == 4'h5; // @[ControlUnit.scala 212:33]
+  assign io_PCWrite = _io_ALUSrcB_T | _io_PCSrc_T_3 | _io_PCSrc_T | _io_PCSrc_T_1; // @[ControlUnit.scala 202:120]
+  assign io_Branch = stateReg == 4'h8; // @[ControlUnit.scala 204:31]
+  assign io_RegWrite = _io_MemtoReg_T | _io_RegDst_T | stateReg == 4'ha | _io_MemtoReg_T_1; // @[ControlUnit.scala 210:120]
+  assign io_IntCause = stateReg == 4'hc; // @[ControlUnit.scala 214:33]
+  assign io_CauseWrite = _io_PCSrc_T | _io_PCSrc_T_1; // @[ControlUnit.scala 216:50]
+  assign io_EPCWrite = _io_PCSrc_T_3 | _io_PCSrc_T; // @[ControlUnit.scala 218:48]
   assign io_state = stateReg; // @[ControlUnit.scala 220:14]
-  assign io_alu_Control = alu_Op == 2'h0 ? 3'h2 : _GEN_32; // @[ControlUnit.scala 223:27 225:24]
+  assign io_alu_Control = ALUOp == 2'h0 ? 3'h2 : _GEN_32; // @[ControlUnit.scala 223:26 225:24]
   always @(posedge clock) begin
     if (reset) begin // @[ControlUnit.scala 66:28]
       stateReg <= 4'h0; // @[ControlUnit.scala 66:28]

@@ -8,7 +8,7 @@
  - ✅ Add Memory
  - ✅ Add Register
  - ✅ Add Register with enable
- - ⭕ Add Control Branch
+ - ✅ Add Control Branch
  - ✅ Add Mux
  - ⭕ Add Shifter
  - ⭕ Add Sign Extention

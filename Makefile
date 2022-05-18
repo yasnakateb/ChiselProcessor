@@ -36,3 +36,9 @@ memory:
 
 memory-test:
 	$(SBT) "testOnly CPU.MemoryTest -- -DwriteVcd=1"
+
+control-branch:
+	$(SBT) "runMain CPU.ControlBranchMain"
+
+control-branch-test:
+	$(SBT) "testOnly CPU.ControlBranchTest"

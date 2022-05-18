@@ -1,0 +1,19 @@
+[
+  {
+    "class":"firrtl.EmitCircuitAnnotation",
+    "emitter":"firrtl.VerilogEmitter"
+  },
+  {
+    "class":"firrtl.transforms.BlackBoxTargetDirAnno",
+    "targetDir":"generated"
+  },
+  {
+    "class":"firrtl.transforms.CombinationalPath",
+    "sink":"~ControlBranch|ControlBranch>io_PCEn",
+    "sources":[
+      "~ControlBranch|ControlBranch>io_PCWrite",
+      "~ControlBranch|ControlBranch>io_Zero",
+      "~ControlBranch|ControlBranch>io_Branch"
+    ]
+  }
+]

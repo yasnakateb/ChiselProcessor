@@ -13,13 +13,13 @@ class ControlUnitTest extends AnyFlatSpec with ChiselScalatestTester {
             dut.io.instr_Function.poke("b100000".U)
             dut.clock.step(1)
             println("State: " + dut.io.state.peek().toString)
-            println("SrcA: " + dut.io.sig_ALUSrcA.peek().toString)
-            println("SrcB: " + dut.io.sig_ALUSrcB.peek().toString)
+            println("SrcA: " + dut.io.ALUSrcA.peek().toString)
+            println("SrcB: " + dut.io.ALUSrcB.peek().toString)
             
             dut.clock.step(1)
             println("State: " + dut.io.state.peek().toString)
-            println("SrcA: " + dut.io.sig_ALUSrcA.peek().toString)
-            println("SrcB: " + dut.io.sig_ALUSrcB.peek().toString)
+            println("SrcA: " + dut.io.ALUSrcA.peek().toString)
+            println("SrcB: " + dut.io.ALUSrcB.peek().toString)
             
             dut.clock.step(1)
             println("State: " + dut.io.state.peek().toString)

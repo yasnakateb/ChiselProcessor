@@ -41,26 +41,24 @@ class ControlUnit extends Module {
     val io = IO(new Bundle {
         val instr_Opcode   = Input(UInt(6.W))
         val instr_Function = Input(UInt(6.W))
-        val over_flow      = Input(Bool())
-        val sig_MemtoReg   = Output(UInt(2.W))
-        val sig_RegDst     = Output(Bool())   
-        val sig_IorD       = Output(Bool())   
-        val sig_PCSrc      = Output(UInt(2.W))
-        val sig_ALUSrcB    = Output(UInt(2.W))
-        val sig_ALUSrcA    = Output(Bool())   
-        val sig_IRWrite    = Output(Bool())   
-        val sig_MemWrite   = Output(Bool())   
-        val sig_PCWrite    = Output(Bool())   
-        val sig_Branch     = Output(Bool())   
-        val sig_RegWrite   = Output(Bool())   
-        val sig_IntCause   = Output(Bool())   
-        val sig_CauseWrite = Output(Bool())   
-        val sig_EPCWrite   = Output(Bool())   
-        val state          = Output(UInt(4.W))
-        val alu_Control    = Output(UInt(3.W))
+        val over_flow  = Input(Bool())
+        val MemtoReg = Output(UInt(2.W))
+        val RegDst = Output(Bool())   
+        val IorD = Output(Bool())   
+        val PCSrc = Output(UInt(2.W))
+        val ALUSrcB = Output(UInt(2.W))
+        val ALUSrcA = Output(Bool())   
+        val IRWrite = Output(Bool())   
+        val MemWrite = Output(Bool())   
+        val PCWrite = Output(Bool())   
+        val Branch = Output(Bool())   
+        val RegWrite = Output(Bool())   
+        val IntCause = Output(Bool())   
+        val CauseWrite = Output(Bool())   
+        val EPCWrite = Output(Bool())   
+        val state = Output(UInt(4.W))
+        val alu_Control = Output(UInt(3.W))
     })
-
-    
 
     // The state register
     val stateReg = RegInit (0.U)
@@ -187,35 +185,35 @@ class ControlUnit extends Module {
 
     val ALUOp = Wire(UInt(2.W))
 
-    io.sig_IorD := Mux((stateReg === STATE_5) || (stateReg === STATE_3), true.B, false.B)
+    io.IorD := Mux((stateReg === STATE_5) || (stateReg === STATE_3), true.B, false.B)
 
-    io.sig_ALUSrcA := Mux((stateReg === STATE_9) || (stateReg === STATE_8) || (stateReg === STATE_6) || (stateReg === STATE_2), true.B, false.B)
+    io.ALUSrcA := Mux((stateReg === STATE_9) || (stateReg === STATE_8) || (stateReg === STATE_6) || (stateReg === STATE_2), true.B, false.B)
 
-    io.sig_ALUSrcB := MuxCase("b00".U(2.W), Array((stateReg === STATE_0) -> "b01".U(2.W), (stateReg === STATE_1) -> "b11".U(2.W), ((stateReg === STATE_9) || (stateReg === STATE_2)) -> "b10".U(2.W)))
+    io.ALUSrcB := MuxCase("b00".U(2.W), Array((stateReg === STATE_0) -> "b01".U(2.W), (stateReg === STATE_1) -> "b11".U(2.W), ((stateReg === STATE_9) || (stateReg === STATE_2)) -> "b10".U(2.W)))
 
     ALUOp := MuxCase("b00".U(2.W), Array((stateReg === STATE_8) -> "b01".U(2.W), (stateReg === STATE_6) -> "b10".U(2.W)))
 
-    io.sig_PCSrc := MuxCase("b00".U(2.W), Array(((stateReg === STATE_12) || (stateReg === STATE_13)) ->  "b11".U(2.W), (stateReg === STATE_11) ->  "b10".U(2.W), (stateReg === STATE_8) ->  "b01".U(2.W))) 
+    io.PCSrc := MuxCase("b00".U(2.W), Array(((stateReg === STATE_12) || (stateReg === STATE_13)) ->  "b11".U(2.W), (stateReg === STATE_11) ->  "b10".U(2.W), (stateReg === STATE_8) ->  "b01".U(2.W))) 
 
-    io.sig_IRWrite := Mux(stateReg === STATE_0, true.B, false.B)
+    io.IRWrite := Mux(stateReg === STATE_0, true.B, false.B)
 
-    io.sig_PCWrite := MuxCase(false.B, Array(((stateReg === STATE_0) || (stateReg === STATE_11) || (stateReg === STATE_12) || (stateReg === STATE_13)) -> true.B)) 
+    io.PCWrite := MuxCase(false.B, Array(((stateReg === STATE_0) || (stateReg === STATE_11) || (stateReg === STATE_12) || (stateReg === STATE_13)) -> true.B)) 
 
-    io.sig_Branch := Mux(stateReg === STATE_8, true.B, false.B)
+    io.Branch := Mux(stateReg === STATE_8, true.B, false.B)
 
-    io.sig_RegDst := Mux(stateReg === STATE_7, true.B, false.B)
+    io.RegDst := Mux(stateReg === STATE_7, true.B, false.B)
 
-    io.sig_MemtoReg := MuxCase("b00".U(2.W), Array((stateReg === STATE_4) ->  "b01".U(2.W), (stateReg === STATE_14) ->  "b10".U(2.W))) 
+    io.MemtoReg := MuxCase("b00".U(2.W), Array((stateReg === STATE_4) ->  "b01".U(2.W), (stateReg === STATE_14) ->  "b10".U(2.W))) 
 
-    io.sig_RegWrite := MuxCase(false.B, Array(((stateReg === STATE_4) || (stateReg === STATE_7) || (stateReg === STATE_10) || (stateReg === STATE_14)) -> true.B)) 
+    io.RegWrite := MuxCase(false.B, Array(((stateReg === STATE_4) || (stateReg === STATE_7) || (stateReg === STATE_10) || (stateReg === STATE_14)) -> true.B)) 
 
-    io.sig_MemWrite := Mux(stateReg === STATE_5, true.B, false.B)
+    io.MemWrite := Mux(stateReg === STATE_5, true.B, false.B)
 
-    io.sig_IntCause := Mux(stateReg === STATE_12, true.B, false.B)
+    io.IntCause := Mux(stateReg === STATE_12, true.B, false.B)
 
-    io.sig_CauseWrite := Mux((stateReg === STATE_12) || (stateReg === STATE_13), true.B, false.B)
+    io.CauseWrite := Mux((stateReg === STATE_12) || (stateReg === STATE_13), true.B, false.B)
 
-    io.sig_EPCWrite := Mux((stateReg === STATE_11) || (stateReg === STATE_12), true.B, false.B)
+    io.EPCWrite := Mux((stateReg === STATE_11) || (stateReg === STATE_12), true.B, false.B)
 
     io.state := stateReg
     io.alu_Control := "b000".U(3.W)
