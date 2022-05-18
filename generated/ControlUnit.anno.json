@@ -1,0 +1,17 @@
+[
+  {
+    "class":"firrtl.EmitCircuitAnnotation",
+    "emitter":"firrtl.VerilogEmitter"
+  },
+  {
+    "class":"firrtl.transforms.BlackBoxTargetDirAnno",
+    "targetDir":"generated"
+  },
+  {
+    "class":"firrtl.transforms.CombinationalPath",
+    "sink":"~ControlUnit|ControlUnit>io_alu_Control",
+    "sources":[
+      "~ControlUnit|ControlUnit>io_instr_Function"
+    ]
+  }
+]
