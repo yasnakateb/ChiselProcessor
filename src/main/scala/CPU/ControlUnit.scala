@@ -259,10 +259,8 @@ class ControlUnit extends Module {
                 io.alu_Control := "b101".U(3.W) //Xor
                 
             }
-        }
-    
+        }   
     }
-
 }
 
 // Generate the Verilog code

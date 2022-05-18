@@ -13,7 +13,9 @@ class RegisterWithEnable extends Module {
     reg := io.in
     io.out := 0.U
     when(io.enable){
+
         io.out := reg
+        
     }
 }
 

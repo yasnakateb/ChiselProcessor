@@ -17,7 +17,9 @@ class RegisterFile extends Module {
     io.rd1 := registerFile(io.src1)
     io.rd2 := registerFile(io.src2)
     when (io.write_data) { 
+
         registerFile(io.src3) := io.wd 
+        
     } 
 }
 

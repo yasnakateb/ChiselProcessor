@@ -21,8 +21,7 @@ class Memory extends Module {
 
         io.rd := rdwrPort 
 
-    }
-        
+    }    
 }
 
 // Generate the Verilog code

@@ -24,17 +24,29 @@ class ALU extends Module {
 
     io.ALUResult := 0.U 
     when (io.ALUControl === AND) {
+
       io.ALUResult := io.SrcA & io.SrcB                            //AND 
+
     } .elsewhen (io.ALUControl === OR) {
+
       io.ALUResult := io.SrcA | io.SrcB                            //OR
+
     } .elsewhen (io.ALUControl === ADD) {
+
       io.ALUResult := io.SrcA + io.SrcB                            //ADD
+
     } .elsewhen (io.ALUControl === XOR) {
+
       io.ALUResult := io.SrcA ^ io.SrcB                            //XOR
+
     } .elsewhen (io.ALUControl === SUB) {
+
       io.ALUResult := io.SrcA - io.SrcB                            //SUB
+
     } .otherwise { 
+
       io.ALUResult :=  0.U(32.W)                                   //Default
+      
     }
     io.Zero := Mux(io.ALUResult === 0.U, true.B, false.B)
 }
