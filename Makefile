@@ -27,3 +27,6 @@ register-with-enable-test:
 
 control-unit:
 	$(SBT) "runMain CPU.ControlUnitMain"
+
+control-unit-test:
+	$(SBT) "testOnly CPU.ControlUnitTest"

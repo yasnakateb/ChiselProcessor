@@ -185,7 +185,7 @@ class ControlUnit extends Module {
 
     }
 
-    val alu_Op = Wire(UInt(2.W))
+    val ALUOp = Wire(UInt(2.W))
 
     io.sig_IorD := Mux((stateReg === STATE_5) || (stateReg === STATE_3), true.B, false.B)
 
@@ -193,7 +193,7 @@ class ControlUnit extends Module {
 
     io.sig_ALUSrcB := MuxCase("b00".U(2.W), Array((stateReg === STATE_0) -> "b01".U(2.W), (stateReg === STATE_1) -> "b11".U(2.W), ((stateReg === STATE_9) || (stateReg === STATE_2)) -> "b10".U(2.W)))
 
-    alu_Op := MuxCase("b00".U(2.W), Array((stateReg === STATE_8) -> "b01".U(2.W), (stateReg === STATE_6) -> "b10".U(2.W)))
+    ALUOp := MuxCase("b00".U(2.W), Array((stateReg === STATE_8) -> "b01".U(2.W), (stateReg === STATE_6) -> "b10".U(2.W)))
 
     io.sig_PCSrc := MuxCase("b00".U(2.W), Array(((stateReg === STATE_12) || (stateReg === STATE_13)) ->  "b11".U(2.W), (stateReg === STATE_11) ->  "b10".U(2.W), (stateReg === STATE_8) ->  "b01".U(2.W))) 
 
@@ -220,15 +220,15 @@ class ControlUnit extends Module {
     io.state := stateReg
     io.alu_Control := "b000".U(3.W)
 
-    when (alu_Op === 0.U) {
+    when (ALUOp === 0.U) {
 
         io.alu_Control := "b010".U(3.W)          //Add
 
-    }.elsewhen (alu_Op(0) === 0.U) {
+    }.elsewhen (ALUOp(0) === 0.U) {
 
         io.alu_Control := "b110".U(3.W)          //Sub
 
-    }.elsewhen (alu_Op(1) === 2.U) {
+    }.elsewhen (ALUOp(1) === 2.U) {
 
         switch(io.instr_Function){
             is("b100000".U(6.W)){
