@@ -4,7 +4,7 @@ import chisel3._
  
 class Memory extends Module {
     val io = IO(new Bundle {
-        val sig_MemWrite = Input(Bool())
+        val MemWrite = Input(Bool())
         val addr = Input(UInt(32.W))
         val wd = Input(UInt(32.W))
         val rd = Output(UInt(32.W))
@@ -13,7 +13,7 @@ class Memory extends Module {
     val ram = SyncReadMem(256, UInt(32.W))
     io.rd := DontCare
     val rdwrPort = ram(io.addr)
-    when (io.sig_MemWrite) {
+    when (io.MemWrite) {
         
         rdwrPort := io.wd
     

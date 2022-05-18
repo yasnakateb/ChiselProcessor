@@ -54,3 +54,9 @@ shifter-sign-imm:
 
 shifter-sign-imm-test:
 	$(SBT) "testOnly CPU.ShifterSignImmTest"
+
+processor:
+	$(SBT) "runMain CPU.ProcessorMain"
+
+processor-test:
+	$(SBT) "testOnly CPU.ProcessorTest"
