@@ -19,7 +19,8 @@ class ALU extends Module {
         val SrcB = Input(UInt(32.W))
         val ALUControl = Input(UInt(3.W))
         val ALUResult = Output(UInt(32.W))
-        val Zero = Output(Bool())      
+        val Zero = Output(Bool())    
+        val over_flow = Output(Bool())    
     })
 
     io.ALUResult := 0.U 
@@ -49,6 +50,9 @@ class ALU extends Module {
       
     }
     io.Zero := Mux(io.ALUResult === 0.U, true.B, false.B)
+    // Todo
+    // Fix over flow
+    io.over_flow := false.B
 }
 
 // Generate the Verilog code
