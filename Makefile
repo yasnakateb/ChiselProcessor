@@ -30,3 +30,9 @@ control-unit:
 
 control-unit-test:
 	$(SBT) "testOnly CPU.ControlUnitTest"
+
+memory:
+	$(SBT) "runMain CPU.MemoryMain"
+
+memory-test:
+	$(SBT) "testOnly CPU.MemoryTest -- -DwriteVcd=1"
