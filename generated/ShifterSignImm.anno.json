@@ -1,0 +1,17 @@
+[
+  {
+    "class":"firrtl.EmitCircuitAnnotation",
+    "emitter":"firrtl.VerilogEmitter"
+  },
+  {
+    "class":"firrtl.transforms.BlackBoxTargetDirAnno",
+    "targetDir":"generated"
+  },
+  {
+    "class":"firrtl.transforms.CombinationalPath",
+    "sink":"~ShifterSignImm|ShifterSignImm>io_shifted_Sign_Imm",
+    "sources":[
+      "~ShifterSignImm|ShifterSignImm>io_sign_Imm"
+    ]
+  }
+]

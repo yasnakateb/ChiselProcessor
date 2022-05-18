@@ -48,3 +48,9 @@ shifter:
 
 shifter-test:
 	$(SBT) "testOnly CPU.ShifterTest"
+
+shifter-sign-imm:
+	$(SBT) "runMain CPU.ShifterSignImmMain"
+
+shifter-sign-imm-test:
+	$(SBT) "testOnly CPU.ShifterSignImmTest"
