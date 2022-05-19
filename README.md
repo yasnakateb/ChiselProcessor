@@ -11,4 +11,4 @@
  - ✅ Add Control Branch
  - ✅ Add Mux
  - ✅ Add Shifter
- - ✅  Add Sign Extention
+ - ✅  Add Sign Extension
