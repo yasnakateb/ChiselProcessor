@@ -8,11 +8,11 @@ class Processor extends Module {
         val state = Output(UInt(4.W))  
     })
 
-    val sig_Branch = Wire(Bool())
+    // val sig_Branch = Wire(Bool())
     val sig_IntCause = Wire(Bool())
     val sig_CauseWrite = Wire(Bool())
     val sig_EPCWrite = Wire(Bool())
-    val sig_PCWrite = Wire(Bool())
+    // val sig_PCWrite = Wire(Bool())
     val sig_MemWrite = Wire(Bool())
     val sig_IRWrite = Wire(Bool())
     val sig_RegDst = Wire(Bool())
@@ -23,9 +23,9 @@ class Processor extends Module {
     val sig_IorD = Wire(Bool())  
     val sig_RegWrite = Wire(Bool())  
     val _Int_Cause = Wire(UInt(32.W))      
-    val _Zero = Wire(Bool())
-    val _Pc_En = Wire(Bool()) 
-    val _Pc = Wire(UInt(32.W)) 
+    // val _Zero = Wire(Bool())
+    // val _Pc_En = Wire(Bool()) 
+    // val _Pc = Wire(UInt(32.W)) 
     val _Pc_Prime = Wire(UInt(32.W))     
     val _Adr = Wire(UInt(32.W))
     val _Rd = Wire(UInt(32.W))
@@ -38,7 +38,7 @@ class Processor extends Module {
     val _Sign_Imm = Wire(UInt(32.W))
     val _Reg_A = Wire(UInt(32.W))
     val _Reg_B = Wire(UInt(32.W))
-    val _Src_A = Wire(UInt(32.W)) 
+    // val _Src_A = Wire(UInt(32.W)) 
     val _Src_B = Wire(UInt(32.W))
     val _Alu_Result = Wire(UInt(32.W))
     val _Pc_Src = Wire(UInt(2.W))
@@ -53,10 +53,23 @@ class Processor extends Module {
     val _C0 = Wire(UInt(32.W))
     val _Cause = Wire(UInt(32.W))
 
-    _Pc_Jump := _Pc(31,28) ## _Pc_Jump_Prime(27,0)
-    
     val control_unit = Module (new ControlUnit())
-
+    val pc = Module (new RegisterWithEnable())
+    val control_branch = Module (new ControlBranch())
+    val epc  = Module (new RegisterWithEnable())
+    val cause = Module (new RegisterWithEnable())
+    val memory  = Module (new Memory())
+    val instr  = Module (new RegisterWithEnable())
+    val data  = Module (new Register())
+    val register_file = Module (new RegisterFile())
+    val sign_extension = Module (new SignExtension())
+    val reg_a  = Module (new Register())
+    val reg_b  = Module (new Register())
+    val shifter = Module (new Shifter())
+    val alu = Module (new ALU())
+    val alu_out  = Module (new Register())
+    val shifter_sign_imm = Module (new ShifterSignImm())
+    
     control_unit.io.instr_Opcode := _Instr(31,26)
     control_unit.io.instr_Function := _Instr(5,0)
     control_unit.io.over_flow := _over_flow
@@ -67,8 +80,6 @@ class Processor extends Module {
     sig_ALUSrcA := control_unit.io.ALUSrcA
     sig_IRWrite := control_unit.io.IRWrite
     sig_MemWrite := control_unit.io.MemWrite
-    sig_PCWrite := control_unit.io.PCWrite
-    sig_Branch := control_unit.io.Branch
     sig_RegWrite := control_unit.io.RegWrite 
     sig_ALUControl := control_unit.io.alu_Control
     sig_IntCause := control_unit.io.IntCause
@@ -76,48 +87,36 @@ class Processor extends Module {
     sig_EPCWrite := control_unit.io.EPCWrite
     io.state := control_unit.io.state
     _Pc_Src := control_unit.io.PCSrc
-
-    val pc = Module (new RegisterWithEnable())
-    pc.io.enable := _Pc_En
-    pc.io.in := _Pc_Prime
-    _Pc := pc.io.out
-
-    val epc  = Module (new RegisterWithEnable())
+    
     epc.io.enable := sig_EPCWrite
-    epc.io.in := _Pc
+    epc.io.in <> pc.io.out
     _Epc := epc.io.out 
 
     _Int_Cause := Mux(sig_IntCause, "h28".U(32.W), "h30".U(32.W))
-
-    val cause = Module (new RegisterWithEnable())
+    
     cause.io.enable := sig_CauseWrite
     cause.io.in := _Int_Cause
     _Cause := cause.io.out
 
     _C0 := MuxCase("b00".U(2.W), Array((_Instr(15,11) === 13.U(5.W)) ->  _Cause, (_Instr(15,11) === 13.U(5.W)) ->  _Epc))
     
-    _Adr := Mux(sig_IorD, _Alu_Out, _Pc)
+    _Adr := Mux(sig_IorD, _Alu_Out, pc.io.out)
 
-    val memory  = Module (new Memory())
     memory.io.MemWrite := sig_MemWrite
     memory.io.addr := _Adr
     memory.io.wd := _Reg_B
     _Rd := memory.io.rd
-
-    val instr  = Module (new RegisterWithEnable())
+    
     instr.io.enable := sig_IRWrite
     instr.io.in := _Rd
     _Instr := instr.io.out 
-
-    val data  = Module (new Register())
+    
     data.io.in := _Rd
     _Data := data.io.out 
 
     _A3 := Mux(sig_RegDst, _Instr(15,11), _Instr(20,16))
 
     _Wd3 := MuxCase("b0".U(32.W), Array((sig_MemtoReg === 0.U(2.W)) ->  _Alu_Out, (sig_MemtoReg === 1.U(2.W)) ->  _Data, (sig_MemtoReg === 2.U(2.W)) ->  _C0, (sig_MemtoReg === 3.U(2.W)) ->  0.U(32.W)))
-
-    val register_file = Module (new RegisterFile())
 
     register_file.io.src1 := _Instr(25,21)
     register_file.io.src2 := _Instr(20,16)
@@ -127,52 +126,45 @@ class Processor extends Module {
     _Rd1 := register_file.io.rd1 
     _Rd2 := register_file.io.rd2 
 
-    val sign_extension = Module (new SignExtension())
-
     sign_extension.io.immidiate := _Instr(15,0)
     _Sign_Imm := sign_extension.io.sign_Imm
-
-    val reg_a  = Module (new Register())
+    
     reg_a.io.in := _Rd1
     _Reg_A := reg_a.io.out 
-
-    val reg_b  = Module (new Register())
+    
     reg_b.io.in := _Rd2
     _Reg_B := reg_b.io.out 
 
-    _Src_A := Mux(sig_ALUSrcA, _Reg_A, _Pc)
-
     _Src_B := MuxCase("b0".U(32.W), Array((sig_ALUSrcB === 0.U(2.W)) ->  _Reg_B, (sig_ALUSrcB === 1.U(2.W)) ->  4.U(32.W), (sig_ALUSrcB === 2.U(2.W)) ->  _Sign_Imm, (sig_ALUSrcB === 3.U(2.W)) ->  _Sign_Imm_Shifted))
-
-    val shifter = Module (new Shifter())
+    
     shifter.io.sign_Imm := _Sign_Imm
     _Sign_Imm_Shifted := shifter.io.shifted_Sign_Imm
 
-    val alu = Module (new ALU())
-    alu.io.SrcA := _Src_A 
+    // pc.io.enable <> control_branch.io.PCEn
+    pc.io.enable := true.B
+    
+    pc.io.in := _Pc_Prime
+    _Pc_Jump := pc.io.out(31,28) ## _Pc_Jump_Prime(27,0)
+    
+    alu.io.SrcA := Mux(sig_ALUSrcA, _Reg_A, pc.io.out) 
     alu.io.SrcB := _Src_B
     alu.io.ALUControl := sig_ALUControl
     _Alu_Result := alu.io.ALUResult
-    _Zero := alu.io.Zero
-    val cb_Zero = _Zero
+    
     _over_flow := alu.io.over_flow 
 
-    val control_branch = Module (new ControlBranch())
-    control_branch.io.PCWrite := sig_PCWrite
-    control_branch.io.Branch := sig_Branch
-    control_branch.io.Zero := cb_Zero
-    _Pc_En := control_branch.io.PCEn
+    control_branch.io.PCWrite <> control_unit.io.PCWrite 
+    control_branch.io.Branch <> control_unit.io.Branch
 
-    val alu_out  = Module (new Register())
+    control_branch.io.Zero <> alu.io.Zero 
+    
     alu_out.io.in := _Alu_Result
     _Alu_Out := alu_out.io.out 
 
     _Pc_Prime := MuxCase("b0".U(32.W), Array((_Pc_Src === 0.U(2.W)) ->  _Alu_Result, (_Pc_Src === 1.U(2.W)) ->  _Alu_Out, (_Pc_Src === 2.U(2.W)) ->  _Pc_Jump, (_Pc_Src === 3.U(2.W)) ->  "h80000180".U(32.W)))
 
-    val shifter_sign_imm = Module (new ShifterSignImm())
     shifter_sign_imm.io.sign_Imm := _Instr(25,0)
     _Pc_Jump_Prime := shifter_sign_imm.io.shifted_Sign_Imm
-
 }
 
 // Generate the Verilog code
