@@ -11,7 +11,7 @@ class SignExtensionTest extends AnyFlatSpec with ChiselScalatestTester {
             val immidiate = "b1111_1111_1111_1111".U(16.W)
             dut.io.immidiate.poke(immidiate)
             dut.clock.step(1)
-            println("Result: " + dut.io.sign_Imm.peek().toBinaryString)
+            println("Result: " + dut.io.sign_Imm.peek().toString)
         }
     } 
 }

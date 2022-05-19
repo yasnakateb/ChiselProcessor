@@ -90,9 +90,9 @@ class Processor extends Module {
     _Int_Cause := Mux(sig_IntCause, "h28".U(32.W), "h30".U(32.W))
 
     val cause = Module (new RegisterWithEnable())
-    pc.io.enable := sig_CauseWrite
-    pc.io.in := _Int_Cause
-    _Cause := pc.io.out
+    cause.io.enable := sig_CauseWrite
+    cause.io.in := _Int_Cause
+    _Cause := cause.io.out
 
     _C0 := MuxCase("b00".U(2.W), Array((_Instr(15,11) === 13.U(5.W)) ->  _Cause, (_Instr(15,11) === 13.U(5.W)) ->  _Epc))
     
@@ -115,7 +115,7 @@ class Processor extends Module {
 
     _A3 := Mux(sig_RegDst, _Instr(15,11), _Instr(20,16))
 
-    _Wd3 := MuxCase("b00".U(2.W), Array((sig_MemtoReg === 0.U(2.W)) ->  _Alu_Out, (sig_MemtoReg === 1.U(2.W)) ->  _Data, (sig_MemtoReg === 2.U(2.W)) ->  _C0, (sig_MemtoReg === 3.U(2.W)) ->  0.U(32.W)))
+    _Wd3 := MuxCase("b0".U(32.W), Array((sig_MemtoReg === 0.U(2.W)) ->  _Alu_Out, (sig_MemtoReg === 1.U(2.W)) ->  _Data, (sig_MemtoReg === 2.U(2.W)) ->  _C0, (sig_MemtoReg === 3.U(2.W)) ->  0.U(32.W)))
 
     val register_file = Module (new RegisterFile())
 
@@ -125,9 +125,54 @@ class Processor extends Module {
     register_file.io.wd := _Wd3
     register_file.io.write_data := sig_RegWrite
     _Rd1 := register_file.io.rd1 
-    _Rd1 := register_file.io.rd2 
+    _Rd2 := register_file.io.rd2 
 
-    
+    val sign_extension = Module (new SignExtension())
+
+    sign_extension.io.immidiate := _Instr(15,0)
+    _Sign_Imm := sign_extension.io.sign_Imm
+
+    val reg_a  = Module (new Register())
+    reg_a.io.in := _Rd1
+    _Reg_A := reg_a.io.out 
+
+    val reg_b  = Module (new Register())
+    reg_b.io.in := _Rd2
+    _Reg_B := reg_b.io.out 
+
+    _Src_A := Mux(sig_ALUSrcA, _Reg_A, _Pc)
+
+    _Src_B := MuxCase("b0".U(32.W), Array((sig_ALUSrcB === 0.U(2.W)) ->  _Reg_B, (sig_ALUSrcB === 1.U(2.W)) ->  4.U(32.W), (sig_ALUSrcB === 2.U(2.W)) ->  _Sign_Imm, (sig_ALUSrcB === 3.U(2.W)) ->  _Sign_Imm_Shifted))
+
+    val shifter = Module (new Shifter())
+    shifter.io.sign_Imm := _Sign_Imm
+    _Sign_Imm_Shifted := shifter.io.shifted_Sign_Imm
+
+    val alu = Module (new ALU())
+    alu.io.SrcA := _Src_A 
+    alu.io.SrcB := _Src_B
+    alu.io.ALUControl := sig_ALUControl
+    _Alu_Result := alu.io.ALUResult
+    _Zero := alu.io.Zero
+    val cb_Zero = _Zero
+    _over_flow := alu.io.over_flow 
+
+    val control_branch = Module (new ControlBranch())
+    control_branch.io.PCWrite := sig_PCWrite
+    control_branch.io.Branch := sig_Branch
+    control_branch.io.Zero := cb_Zero
+    _Pc_En := control_branch.io.PCEn
+
+    val alu_out  = Module (new Register())
+    alu_out.io.in := _Alu_Result
+    _Alu_Out := alu_out.io.out 
+
+    _Pc_Prime := MuxCase("b0".U(32.W), Array((_Pc_Src === 0.U(2.W)) ->  _Alu_Result, (_Pc_Src === 1.U(2.W)) ->  _Alu_Out, (_Pc_Src === 2.U(2.W)) ->  _Pc_Jump, (_Pc_Src === 3.U(2.W)) ->  "h80000180".U(32.W)))
+
+    val shifter_sign_imm = Module (new ShifterSignImm())
+    shifter_sign_imm.io.sign_Imm := _Instr(25,0)
+    _Pc_Jump_Prime := shifter_sign_imm.io.shifted_Sign_Imm
+
 }
 
 // Generate the Verilog code
