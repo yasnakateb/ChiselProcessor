@@ -11,4 +11,9 @@
  - ✅ Add Control Branch
  - ✅ Add Mux
  - ✅ Add Shifter
- - ✅  Add Sign Extension
+ - ✅ Add Sign Extension
+ - ⭕ Fix overflow
+ - ⭕ Fix PCEn
+
+### Data Path
+![](assets/datapath.png)
