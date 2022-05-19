@@ -16,4 +16,4 @@
  - ⭕ Fix PCEn
 
 ### Data Path
-![](assets/datapath.png)
+![](assets/datapath.jpg)
