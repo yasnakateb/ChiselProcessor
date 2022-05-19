@@ -8,11 +8,14 @@ class SignExtension extends Module {
         val immidiate = Input(UInt(16.W))
         val sign_Imm = Output(UInt(32.W))
     })
-    val sign_bit = Wire(UInt (1.W))
-    val slot = Vec(80).fill{sign_bit}
-    
-    
-    io.sign_Imm := 0.U
+    val sign_bit = io.immidiate(15)
+    val ways_vector = Wire(Vec(16, Bool()))
+
+    for (i <- 0 until 16) {
+      ways_vector(i) := sign_bit
+    }
+    val sign_bits = ways_vector.asUInt
+    io.sign_Imm := Cat(sign_bits, io.immidiate)
 }
 
 // Generate the Verilog code
