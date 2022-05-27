@@ -14,6 +14,13 @@
  - ✅ Add Sign Extension
  - ⭕ Fix overflow
  - ⭕ Fix PCEn
+ - ⭕ Test R_TYPE
+ - ⭕ Test LW 
+ - ⭕ Test SW
+ - ⭕ Test BEQ
+ - ⭕ Test ADDI
+ - ⭕ Test J 
+ - ⭕ Test MFC0 
 
-### Data Path
-![](assets/datapath.png)
+## Data Path
+![](assets/datapath.jpg)
