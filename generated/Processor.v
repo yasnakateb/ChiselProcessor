@@ -827,126 +827,112 @@ module Processor(
   input        reset,
   output [3:0] io_state
 );
-  wire  control_unit_clock; // @[Processor.scala 56:31]
-  wire  control_unit_reset; // @[Processor.scala 56:31]
-  wire [5:0] control_unit_io_instr_Opcode; // @[Processor.scala 56:31]
-  wire [5:0] control_unit_io_instr_Function; // @[Processor.scala 56:31]
-  wire [1:0] control_unit_io_MemtoReg; // @[Processor.scala 56:31]
-  wire  control_unit_io_RegDst; // @[Processor.scala 56:31]
-  wire  control_unit_io_IorD; // @[Processor.scala 56:31]
-  wire [1:0] control_unit_io_PCSrc; // @[Processor.scala 56:31]
-  wire [1:0] control_unit_io_ALUSrcB; // @[Processor.scala 56:31]
-  wire  control_unit_io_ALUSrcA; // @[Processor.scala 56:31]
-  wire  control_unit_io_IRWrite; // @[Processor.scala 56:31]
-  wire  control_unit_io_MemWrite; // @[Processor.scala 56:31]
-  wire  control_unit_io_RegWrite; // @[Processor.scala 56:31]
-  wire  control_unit_io_IntCause; // @[Processor.scala 56:31]
-  wire  control_unit_io_CauseWrite; // @[Processor.scala 56:31]
-  wire  control_unit_io_EPCWrite; // @[Processor.scala 56:31]
-  wire [3:0] control_unit_io_state; // @[Processor.scala 56:31]
-  wire [2:0] control_unit_io_alu_Control; // @[Processor.scala 56:31]
-  wire  pc_clock; // @[Processor.scala 57:21]
-  wire  pc_reset; // @[Processor.scala 57:21]
-  wire [31:0] pc_io_in; // @[Processor.scala 57:21]
-  wire  pc_io_enable; // @[Processor.scala 57:21]
-  wire [31:0] pc_io_out; // @[Processor.scala 57:21]
-  wire  epc_clock; // @[Processor.scala 59:23]
-  wire  epc_reset; // @[Processor.scala 59:23]
-  wire [31:0] epc_io_in; // @[Processor.scala 59:23]
-  wire  epc_io_enable; // @[Processor.scala 59:23]
-  wire [31:0] epc_io_out; // @[Processor.scala 59:23]
-  wire  cause_clock; // @[Processor.scala 60:24]
-  wire  cause_reset; // @[Processor.scala 60:24]
-  wire [31:0] cause_io_in; // @[Processor.scala 60:24]
-  wire  cause_io_enable; // @[Processor.scala 60:24]
-  wire [31:0] cause_io_out; // @[Processor.scala 60:24]
-  wire  memory_clock; // @[Processor.scala 61:26]
-  wire  memory_io_MemWrite; // @[Processor.scala 61:26]
-  wire [31:0] memory_io_addr; // @[Processor.scala 61:26]
-  wire [31:0] memory_io_wd; // @[Processor.scala 61:26]
-  wire [31:0] memory_io_rd; // @[Processor.scala 61:26]
-  wire  instr_clock; // @[Processor.scala 62:25]
-  wire  instr_reset; // @[Processor.scala 62:25]
-  wire [31:0] instr_io_in; // @[Processor.scala 62:25]
-  wire  instr_io_enable; // @[Processor.scala 62:25]
-  wire [31:0] instr_io_out; // @[Processor.scala 62:25]
-  wire  data_clock; // @[Processor.scala 63:24]
-  wire  data_reset; // @[Processor.scala 63:24]
-  wire [31:0] data_io_in; // @[Processor.scala 63:24]
-  wire [31:0] data_io_out; // @[Processor.scala 63:24]
-  wire  register_file_clock; // @[Processor.scala 64:32]
-  wire [4:0] register_file_io_src1; // @[Processor.scala 64:32]
-  wire [4:0] register_file_io_src2; // @[Processor.scala 64:32]
-  wire [4:0] register_file_io_src3; // @[Processor.scala 64:32]
-  wire [31:0] register_file_io_wd; // @[Processor.scala 64:32]
-  wire  register_file_io_write_data; // @[Processor.scala 64:32]
-  wire [31:0] register_file_io_rd1; // @[Processor.scala 64:32]
-  wire [31:0] register_file_io_rd2; // @[Processor.scala 64:32]
-  wire [15:0] sign_extension_io_immidiate; // @[Processor.scala 65:33]
-  wire [31:0] sign_extension_io_sign_Imm; // @[Processor.scala 65:33]
-  wire  reg_a_clock; // @[Processor.scala 66:25]
-  wire  reg_a_reset; // @[Processor.scala 66:25]
-  wire [31:0] reg_a_io_in; // @[Processor.scala 66:25]
-  wire [31:0] reg_a_io_out; // @[Processor.scala 66:25]
-  wire  reg_b_clock; // @[Processor.scala 67:25]
-  wire  reg_b_reset; // @[Processor.scala 67:25]
-  wire [31:0] reg_b_io_in; // @[Processor.scala 67:25]
-  wire [31:0] reg_b_io_out; // @[Processor.scala 67:25]
-  wire [31:0] shifter_io_sign_Imm; // @[Processor.scala 68:26]
-  wire [31:0] shifter_io_shifted_Sign_Imm; // @[Processor.scala 68:26]
-  wire [31:0] alu_io_SrcA; // @[Processor.scala 69:22]
-  wire [31:0] alu_io_SrcB; // @[Processor.scala 69:22]
-  wire [2:0] alu_io_ALUControl; // @[Processor.scala 69:22]
-  wire [31:0] alu_io_ALUResult; // @[Processor.scala 69:22]
-  wire  alu_out_clock; // @[Processor.scala 70:27]
-  wire  alu_out_reset; // @[Processor.scala 70:27]
-  wire [31:0] alu_out_io_in; // @[Processor.scala 70:27]
-  wire [31:0] alu_out_io_out; // @[Processor.scala 70:27]
-  wire [25:0] shifter_sign_imm_io_sign_Imm; // @[Processor.scala 71:35]
-  wire [27:0] shifter_sign_imm_io_shifted_Sign_Imm; // @[Processor.scala 71:35]
-  wire [31:0] _Instr = instr_io_out; // @[Processor.scala 112:12 32:22]
-  wire  sig_IntCause = control_unit_io_IntCause; // @[Processor.scala 12:28 85:18]
-  wire  __C0_T_1 = _Instr[15:11] == 5'hd; // @[Processor.scala 101:55]
-  wire [31:0] _Epc = epc_io_out; // @[Processor.scala 52:20 93:10]
-  wire [31:0] __C0_T_4 = __C0_T_1 ? _Epc : 32'h0; // @[Mux.scala 101:16]
-  wire [31:0] _Cause = cause_io_out; // @[Processor.scala 54:22 99:12]
-  wire [31:0] __C0_T_5 = __C0_T_1 ? _Cause : __C0_T_4; // @[Mux.scala 101:16]
-  wire  sig_IorD = control_unit_io_IorD; // @[Processor.scala 23:24 78:14]
-  wire [31:0] _Alu_Out = alu_out_io_out; // @[Processor.scala 162:14 47:24]
-  wire  sig_RegDst = control_unit_io_RegDst; // @[Processor.scala 18:26 77:16]
-  wire [1:0] sig_MemtoReg = control_unit_io_MemtoReg; // @[Processor.scala 22:28 76:18]
-  wire  __Wd3_T = sig_MemtoReg == 2'h0; // @[Processor.scala 119:55]
-  wire  __Wd3_T_1 = sig_MemtoReg == 2'h1; // @[Processor.scala 119:97]
-  wire  __Wd3_T_2 = sig_MemtoReg == 2'h2; // @[Processor.scala 119:136]
-  wire [31:0] __Wd3_T_5 = __Wd3_T_2 ? __C0_T_5 : 32'h0; // @[Mux.scala 101:16]
-  wire [31:0] _Data = data_io_out; // @[Processor.scala 115:11 33:21]
-  wire [31:0] __Wd3_T_6 = __Wd3_T_1 ? _Data : __Wd3_T_5; // @[Mux.scala 101:16]
-  wire [1:0] sig_ALUSrcB = control_unit_io_ALUSrcB; // @[Processor.scala 21:27 79:17]
-  wire  __Src_B_T = sig_ALUSrcB == 2'h0; // @[Processor.scala 138:56]
-  wire  __Src_B_T_1 = sig_ALUSrcB == 2'h1; // @[Processor.scala 138:95]
-  wire  __Src_B_T_2 = sig_ALUSrcB == 2'h2; // @[Processor.scala 138:137]
-  wire  __Src_B_T_3 = sig_ALUSrcB == 2'h3; // @[Processor.scala 138:179]
-  wire [31:0] _Sign_Imm_Shifted = shifter_io_shifted_Sign_Imm; // @[Processor.scala 141:23 51:33]
-  wire [31:0] __Src_B_T_4 = __Src_B_T_3 ? _Sign_Imm_Shifted : 32'h0; // @[Mux.scala 101:16]
-  wire [31:0] _Sign_Imm = sign_extension_io_sign_Imm; // @[Processor.scala 130:15 38:25]
-  wire [31:0] __Src_B_T_5 = __Src_B_T_2 ? _Sign_Imm : __Src_B_T_4; // @[Mux.scala 101:16]
-  wire [31:0] __Src_B_T_6 = __Src_B_T_1 ? 32'h4 : __Src_B_T_5; // @[Mux.scala 101:16]
-  wire [31:0] _Reg_B = reg_b_io_out; // @[Processor.scala 136:12 40:22]
-  wire [27:0] _Pc_Jump_Prime = shifter_sign_imm_io_shifted_Sign_Imm; // @[Processor.scala 167:20 46:30]
-  wire [31:0] __Pc_Jump_T_2 = {pc_io_out[31:28],_Pc_Jump_Prime}; // @[Processor.scala 147:34]
-  wire  sig_ALUSrcA = control_unit_io_ALUSrcA; // @[Processor.scala 19:27 80:17]
-  wire [31:0] _Reg_A = reg_a_io_out; // @[Processor.scala 133:12 39:22]
-  wire [1:0] _Pc_Src = control_unit_io_PCSrc; // @[Processor.scala 44:23 89:13]
-  wire  __Pc_Prime_T = _Pc_Src == 2'h0; // @[Processor.scala 164:55]
-  wire  __Pc_Prime_T_1 = _Pc_Src == 2'h1; // @[Processor.scala 164:95]
-  wire  __Pc_Prime_T_2 = _Pc_Src == 2'h2; // @[Processor.scala 164:132]
-  wire  __Pc_Prime_T_3 = _Pc_Src == 2'h3; // @[Processor.scala 164:169]
-  wire [31:0] __Pc_Prime_T_4 = __Pc_Prime_T_3 ? 32'h80000180 : 32'h0; // @[Mux.scala 101:16]
-  wire [31:0] __Pc_Prime_T_5 = __Pc_Prime_T_2 ? __Pc_Jump_T_2 : __Pc_Prime_T_4; // @[Mux.scala 101:16]
-  wire [31:0] __Pc_Prime_T_6 = __Pc_Prime_T_1 ? _Alu_Out : __Pc_Prime_T_5; // @[Mux.scala 101:16]
-  wire [31:0] _Alu_Result = alu_io_ALUResult; // @[Processor.scala 152:17 43:27]
-  wire [131:0] _Rd1 = {{100'd0}, register_file_io_rd1}; // @[Processor.scala 126:10 36:20]
-  ControlUnit control_unit ( // @[Processor.scala 56:31]
+`ifdef RANDOMIZE_REG_INIT
+  reg [31:0] _RAND_0;
+`endif // RANDOMIZE_REG_INIT
+  wire  control_unit_clock; // @[Processor.scala 11:31]
+  wire  control_unit_reset; // @[Processor.scala 11:31]
+  wire [5:0] control_unit_io_instr_Opcode; // @[Processor.scala 11:31]
+  wire [5:0] control_unit_io_instr_Function; // @[Processor.scala 11:31]
+  wire [1:0] control_unit_io_MemtoReg; // @[Processor.scala 11:31]
+  wire  control_unit_io_RegDst; // @[Processor.scala 11:31]
+  wire  control_unit_io_IorD; // @[Processor.scala 11:31]
+  wire [1:0] control_unit_io_PCSrc; // @[Processor.scala 11:31]
+  wire [1:0] control_unit_io_ALUSrcB; // @[Processor.scala 11:31]
+  wire  control_unit_io_ALUSrcA; // @[Processor.scala 11:31]
+  wire  control_unit_io_IRWrite; // @[Processor.scala 11:31]
+  wire  control_unit_io_MemWrite; // @[Processor.scala 11:31]
+  wire  control_unit_io_RegWrite; // @[Processor.scala 11:31]
+  wire  control_unit_io_IntCause; // @[Processor.scala 11:31]
+  wire  control_unit_io_CauseWrite; // @[Processor.scala 11:31]
+  wire  control_unit_io_EPCWrite; // @[Processor.scala 11:31]
+  wire [3:0] control_unit_io_state; // @[Processor.scala 11:31]
+  wire [2:0] control_unit_io_alu_Control; // @[Processor.scala 11:31]
+  wire  pc_clock; // @[Processor.scala 12:21]
+  wire  pc_reset; // @[Processor.scala 12:21]
+  wire [31:0] pc_io_in; // @[Processor.scala 12:21]
+  wire  pc_io_enable; // @[Processor.scala 12:21]
+  wire [31:0] pc_io_out; // @[Processor.scala 12:21]
+  wire  epc_clock; // @[Processor.scala 14:23]
+  wire  epc_reset; // @[Processor.scala 14:23]
+  wire [31:0] epc_io_in; // @[Processor.scala 14:23]
+  wire  epc_io_enable; // @[Processor.scala 14:23]
+  wire [31:0] epc_io_out; // @[Processor.scala 14:23]
+  wire  cause_clock; // @[Processor.scala 15:24]
+  wire  cause_reset; // @[Processor.scala 15:24]
+  wire [31:0] cause_io_in; // @[Processor.scala 15:24]
+  wire  cause_io_enable; // @[Processor.scala 15:24]
+  wire [31:0] cause_io_out; // @[Processor.scala 15:24]
+  wire  memory_clock; // @[Processor.scala 16:26]
+  wire  memory_io_MemWrite; // @[Processor.scala 16:26]
+  wire [31:0] memory_io_addr; // @[Processor.scala 16:26]
+  wire [31:0] memory_io_wd; // @[Processor.scala 16:26]
+  wire [31:0] memory_io_rd; // @[Processor.scala 16:26]
+  wire  instr_clock; // @[Processor.scala 17:25]
+  wire  instr_reset; // @[Processor.scala 17:25]
+  wire [31:0] instr_io_in; // @[Processor.scala 17:25]
+  wire  instr_io_enable; // @[Processor.scala 17:25]
+  wire [31:0] instr_io_out; // @[Processor.scala 17:25]
+  wire  data_clock; // @[Processor.scala 18:24]
+  wire  data_reset; // @[Processor.scala 18:24]
+  wire [31:0] data_io_in; // @[Processor.scala 18:24]
+  wire [31:0] data_io_out; // @[Processor.scala 18:24]
+  wire  register_file_clock; // @[Processor.scala 19:32]
+  wire [4:0] register_file_io_src1; // @[Processor.scala 19:32]
+  wire [4:0] register_file_io_src2; // @[Processor.scala 19:32]
+  wire [4:0] register_file_io_src3; // @[Processor.scala 19:32]
+  wire [31:0] register_file_io_wd; // @[Processor.scala 19:32]
+  wire  register_file_io_write_data; // @[Processor.scala 19:32]
+  wire [31:0] register_file_io_rd1; // @[Processor.scala 19:32]
+  wire [31:0] register_file_io_rd2; // @[Processor.scala 19:32]
+  wire [15:0] sign_extension_io_immidiate; // @[Processor.scala 20:33]
+  wire [31:0] sign_extension_io_sign_Imm; // @[Processor.scala 20:33]
+  wire  reg_a_clock; // @[Processor.scala 21:25]
+  wire  reg_a_reset; // @[Processor.scala 21:25]
+  wire [31:0] reg_a_io_in; // @[Processor.scala 21:25]
+  wire [31:0] reg_a_io_out; // @[Processor.scala 21:25]
+  wire  reg_b_clock; // @[Processor.scala 22:25]
+  wire  reg_b_reset; // @[Processor.scala 22:25]
+  wire [31:0] reg_b_io_in; // @[Processor.scala 22:25]
+  wire [31:0] reg_b_io_out; // @[Processor.scala 22:25]
+  wire [31:0] shifter_io_sign_Imm; // @[Processor.scala 23:26]
+  wire [31:0] shifter_io_shifted_Sign_Imm; // @[Processor.scala 23:26]
+  wire [31:0] alu_io_SrcA; // @[Processor.scala 24:22]
+  wire [31:0] alu_io_SrcB; // @[Processor.scala 24:22]
+  wire [2:0] alu_io_ALUControl; // @[Processor.scala 24:22]
+  wire [31:0] alu_io_ALUResult; // @[Processor.scala 24:22]
+  wire  alu_out_clock; // @[Processor.scala 25:27]
+  wire  alu_out_reset; // @[Processor.scala 25:27]
+  wire [31:0] alu_out_io_in; // @[Processor.scala 25:27]
+  wire [31:0] alu_out_io_out; // @[Processor.scala 25:27]
+  wire [25:0] shifter_sign_imm_io_sign_Imm; // @[Processor.scala 26:35]
+  wire [27:0] shifter_sign_imm_io_shifted_Sign_Imm; // @[Processor.scala 26:35]
+  reg [31:0] _Instr; // @[Processor.scala 39:26]
+  wire  __C0_T_1 = _Instr[15:11] == 5'hd; // @[Processor.scala 73:58]
+  wire [31:0] __C0_T_4 = __C0_T_1 ? epc_io_out : 32'h0; // @[Mux.scala 101:16]
+  wire [31:0] _C0 = __C0_T_1 ? cause_io_out : __C0_T_4; // @[Mux.scala 101:16]
+  wire  _register_file_io_wd_T = control_unit_io_MemtoReg == 2'h0; // @[Processor.scala 96:82]
+  wire  _register_file_io_wd_T_1 = control_unit_io_MemtoReg == 2'h1; // @[Processor.scala 96:142]
+  wire  _register_file_io_wd_T_2 = control_unit_io_MemtoReg == 2'h2; // @[Processor.scala 96:199]
+  wire [31:0] _register_file_io_wd_T_5 = _register_file_io_wd_T_2 ? _C0 : 32'h0; // @[Mux.scala 101:16]
+  wire [31:0] _register_file_io_wd_T_6 = _register_file_io_wd_T_1 ? data_io_out : _register_file_io_wd_T_5; // @[Mux.scala 101:16]
+  wire [27:0] __Pc_Jump_T_1 = shifter_sign_imm_io_shifted_Sign_Imm; // @[Processor.scala 119:54]
+  wire [31:0] _Pc_Jump = {pc_io_out[31:28],__Pc_Jump_T_1}; // @[Processor.scala 119:37]
+  wire  _pc_io_in_T = control_unit_io_PCSrc == 2'h0; // @[Processor.scala 121:68]
+  wire  _pc_io_in_T_1 = control_unit_io_PCSrc == 2'h1; // @[Processor.scala 121:127]
+  wire  _pc_io_in_T_2 = control_unit_io_PCSrc == 2'h2; // @[Processor.scala 121:184]
+  wire  _pc_io_in_T_3 = control_unit_io_PCSrc == 2'h3; // @[Processor.scala 121:235]
+  wire [31:0] _pc_io_in_T_4 = _pc_io_in_T_3 ? 32'h80000180 : 32'h0; // @[Mux.scala 101:16]
+  wire [31:0] _pc_io_in_T_5 = _pc_io_in_T_2 ? _Pc_Jump : _pc_io_in_T_4; // @[Mux.scala 101:16]
+  wire [31:0] _pc_io_in_T_6 = _pc_io_in_T_1 ? alu_out_io_out : _pc_io_in_T_5; // @[Mux.scala 101:16]
+  wire  _alu_io_SrcB_T = control_unit_io_ALUSrcB == 2'h0; // @[Processor.scala 126:73]
+  wire  _alu_io_SrcB_T_1 = control_unit_io_ALUSrcB == 2'h1; // @[Processor.scala 126:130]
+  wire  _alu_io_SrcB_T_2 = control_unit_io_ALUSrcB == 2'h2; // @[Processor.scala 126:184]
+  wire  _alu_io_SrcB_T_3 = control_unit_io_ALUSrcB == 2'h3; // @[Processor.scala 126:255]
+  wire [31:0] _alu_io_SrcB_T_4 = _alu_io_SrcB_T_3 ? shifter_io_shifted_Sign_Imm : 32'h0; // @[Mux.scala 101:16]
+  wire [31:0] _alu_io_SrcB_T_5 = _alu_io_SrcB_T_2 ? sign_extension_io_sign_Imm : _alu_io_SrcB_T_4; // @[Mux.scala 101:16]
+  wire [31:0] _alu_io_SrcB_T_6 = _alu_io_SrcB_T_1 ? 32'h4 : _alu_io_SrcB_T_5; // @[Mux.scala 101:16]
+  ControlUnit control_unit ( // @[Processor.scala 11:31]
     .clock(control_unit_clock),
     .reset(control_unit_reset),
     .io_instr_Opcode(control_unit_io_instr_Opcode),
@@ -966,48 +952,48 @@ module Processor(
     .io_state(control_unit_io_state),
     .io_alu_Control(control_unit_io_alu_Control)
   );
-  RegisterWithEnable pc ( // @[Processor.scala 57:21]
+  RegisterWithEnable pc ( // @[Processor.scala 12:21]
     .clock(pc_clock),
     .reset(pc_reset),
     .io_in(pc_io_in),
     .io_enable(pc_io_enable),
     .io_out(pc_io_out)
   );
-  RegisterWithEnable epc ( // @[Processor.scala 59:23]
+  RegisterWithEnable epc ( // @[Processor.scala 14:23]
     .clock(epc_clock),
     .reset(epc_reset),
     .io_in(epc_io_in),
     .io_enable(epc_io_enable),
     .io_out(epc_io_out)
   );
-  RegisterWithEnable cause ( // @[Processor.scala 60:24]
+  RegisterWithEnable cause ( // @[Processor.scala 15:24]
     .clock(cause_clock),
     .reset(cause_reset),
     .io_in(cause_io_in),
     .io_enable(cause_io_enable),
     .io_out(cause_io_out)
   );
-  Memory memory ( // @[Processor.scala 61:26]
+  Memory memory ( // @[Processor.scala 16:26]
     .clock(memory_clock),
     .io_MemWrite(memory_io_MemWrite),
     .io_addr(memory_io_addr),
     .io_wd(memory_io_wd),
     .io_rd(memory_io_rd)
   );
-  RegisterWithEnable instr ( // @[Processor.scala 62:25]
+  RegisterWithEnable instr ( // @[Processor.scala 17:25]
     .clock(instr_clock),
     .reset(instr_reset),
     .io_in(instr_io_in),
     .io_enable(instr_io_enable),
     .io_out(instr_io_out)
   );
-  Register data ( // @[Processor.scala 63:24]
+  Register data ( // @[Processor.scala 18:24]
     .clock(data_clock),
     .reset(data_reset),
     .io_in(data_io_in),
     .io_out(data_io_out)
   );
-  RegisterFile register_file ( // @[Processor.scala 64:32]
+  RegisterFile register_file ( // @[Processor.scala 19:32]
     .clock(register_file_clock),
     .io_src1(register_file_io_src1),
     .io_src2(register_file_io_src2),
@@ -1017,89 +1003,141 @@ module Processor(
     .io_rd1(register_file_io_rd1),
     .io_rd2(register_file_io_rd2)
   );
-  SignExtension sign_extension ( // @[Processor.scala 65:33]
+  SignExtension sign_extension ( // @[Processor.scala 20:33]
     .io_immidiate(sign_extension_io_immidiate),
     .io_sign_Imm(sign_extension_io_sign_Imm)
   );
-  Register reg_a ( // @[Processor.scala 66:25]
+  Register reg_a ( // @[Processor.scala 21:25]
     .clock(reg_a_clock),
     .reset(reg_a_reset),
     .io_in(reg_a_io_in),
     .io_out(reg_a_io_out)
   );
-  Register reg_b ( // @[Processor.scala 67:25]
+  Register reg_b ( // @[Processor.scala 22:25]
     .clock(reg_b_clock),
     .reset(reg_b_reset),
     .io_in(reg_b_io_in),
     .io_out(reg_b_io_out)
   );
-  Shifter shifter ( // @[Processor.scala 68:26]
+  Shifter shifter ( // @[Processor.scala 23:26]
     .io_sign_Imm(shifter_io_sign_Imm),
     .io_shifted_Sign_Imm(shifter_io_shifted_Sign_Imm)
   );
-  ALU alu ( // @[Processor.scala 69:22]
+  ALU alu ( // @[Processor.scala 24:22]
     .io_SrcA(alu_io_SrcA),
     .io_SrcB(alu_io_SrcB),
     .io_ALUControl(alu_io_ALUControl),
     .io_ALUResult(alu_io_ALUResult)
   );
-  Register alu_out ( // @[Processor.scala 70:27]
+  Register alu_out ( // @[Processor.scala 25:27]
     .clock(alu_out_clock),
     .reset(alu_out_reset),
     .io_in(alu_out_io_in),
     .io_out(alu_out_io_out)
   );
-  ShifterSignImm shifter_sign_imm ( // @[Processor.scala 71:35]
+  ShifterSignImm shifter_sign_imm ( // @[Processor.scala 26:35]
     .io_sign_Imm(shifter_sign_imm_io_sign_Imm),
     .io_shifted_Sign_Imm(shifter_sign_imm_io_shifted_Sign_Imm)
   );
-  assign io_state = control_unit_io_state; // @[Processor.scala 88:14]
+  assign io_state = control_unit_io_state; // @[Processor.scala 59:14]
   assign control_unit_clock = clock;
   assign control_unit_reset = reset;
-  assign control_unit_io_instr_Opcode = _Instr[31:26]; // @[Processor.scala 73:43]
-  assign control_unit_io_instr_Function = _Instr[5:0]; // @[Processor.scala 74:45]
+  assign control_unit_io_instr_Opcode = _Instr[31:26]; // @[Processor.scala 43:43]
+  assign control_unit_io_instr_Function = _Instr[5:0]; // @[Processor.scala 44:45]
   assign pc_clock = clock;
   assign pc_reset = reset;
-  assign pc_io_in = __Pc_Prime_T ? _Alu_Result : __Pc_Prime_T_6; // @[Mux.scala 101:16]
-  assign pc_io_enable = 1'h1; // @[Processor.scala 144:18]
+  assign pc_io_in = _pc_io_in_T ? alu_io_ALUResult : _pc_io_in_T_6; // @[Mux.scala 101:16]
+  assign pc_io_enable = 1'h1; // @[Processor.scala 116:18]
   assign epc_clock = clock;
   assign epc_reset = reset;
-  assign epc_io_in = pc_io_out; // @[Processor.scala 92:15]
-  assign epc_io_enable = control_unit_io_EPCWrite; // @[Processor.scala 14:28 87:18]
+  assign epc_io_in = pc_io_out; // @[Processor.scala 63:15]
+  assign epc_io_enable = control_unit_io_EPCWrite; // @[Processor.scala 62:19]
   assign cause_clock = clock;
   assign cause_reset = reset;
-  assign cause_io_in = sig_IntCause ? 32'h28 : 32'h30; // @[Processor.scala 95:22]
-  assign cause_io_enable = control_unit_io_CauseWrite; // @[Processor.scala 13:30 86:20]
+  assign cause_io_in = control_unit_io_IntCause ? 32'h28 : 32'h30; // @[Processor.scala 69:23]
+  assign cause_io_enable = control_unit_io_CauseWrite; // @[Processor.scala 68:21]
   assign memory_clock = clock;
-  assign memory_io_MemWrite = control_unit_io_MemWrite; // @[Processor.scala 16:28 82:18]
-  assign memory_io_addr = sig_IorD ? _Alu_Out : pc_io_out; // @[Processor.scala 103:16]
-  assign memory_io_wd = reg_b_io_out; // @[Processor.scala 136:12 40:22]
+  assign memory_io_MemWrite = control_unit_io_MemWrite; // @[Processor.scala 77:24]
+  assign memory_io_addr = control_unit_io_IorD ? alu_out_io_out : pc_io_out; // @[Processor.scala 78:26]
+  assign memory_io_wd = reg_b_io_out; // @[Processor.scala 79:18]
   assign instr_clock = clock;
   assign instr_reset = reset;
-  assign instr_io_in = memory_io_rd; // @[Processor.scala 31:19 108:9]
-  assign instr_io_enable = control_unit_io_IRWrite; // @[Processor.scala 17:27 81:17]
+  assign instr_io_in = memory_io_rd; // @[Processor.scala 83:17]
+  assign instr_io_enable = control_unit_io_IRWrite; // @[Processor.scala 82:21]
   assign data_clock = clock;
   assign data_reset = reset;
-  assign data_io_in = memory_io_rd; // @[Processor.scala 31:19 108:9]
+  assign data_io_in = memory_io_rd; // @[Processor.scala 86:16]
   assign register_file_clock = clock;
-  assign register_file_io_src1 = _Instr[25:21]; // @[Processor.scala 121:36]
-  assign register_file_io_src2 = _Instr[20:16]; // @[Processor.scala 122:36]
-  assign register_file_io_src3 = sig_RegDst ? _Instr[15:11] : _Instr[20:16]; // @[Processor.scala 117:15]
-  assign register_file_io_wd = __Wd3_T ? _Alu_Out : __Wd3_T_6; // @[Mux.scala 101:16]
-  assign register_file_io_write_data = control_unit_io_RegWrite; // @[Processor.scala 24:28 83:18]
-  assign sign_extension_io_immidiate = _Instr[15:0]; // @[Processor.scala 129:42]
+  assign register_file_io_src1 = _Instr[25:21]; // @[Processor.scala 93:36]
+  assign register_file_io_src2 = _Instr[20:16]; // @[Processor.scala 94:36]
+  assign register_file_io_src3 = control_unit_io_RegDst ? _Instr[15:11] : _Instr[20:16]; // @[Processor.scala 95:33]
+  assign register_file_io_wd = _register_file_io_wd_T ? alu_out_io_out : _register_file_io_wd_T_6; // @[Mux.scala 101:16]
+  assign register_file_io_write_data = control_unit_io_RegWrite; // @[Processor.scala 97:33]
+  assign sign_extension_io_immidiate = _Instr[15:0]; // @[Processor.scala 101:42]
   assign reg_a_clock = clock;
   assign reg_a_reset = reset;
-  assign reg_a_io_in = _Rd1[31:0]; // @[Processor.scala 132:17]
+  assign reg_a_io_in = register_file_io_rd1; // @[Processor.scala 104:17]
   assign reg_b_clock = clock;
   assign reg_b_reset = reset;
-  assign reg_b_io_in = register_file_io_rd2; // @[Processor.scala 127:10 37:20]
-  assign shifter_io_sign_Imm = sign_extension_io_sign_Imm; // @[Processor.scala 130:15 38:25]
-  assign alu_io_SrcA = sig_ALUSrcA ? _Reg_A : pc_io_out; // @[Processor.scala 149:23]
-  assign alu_io_SrcB = __Src_B_T ? _Reg_B : __Src_B_T_6; // @[Mux.scala 101:16]
-  assign alu_io_ALUControl = control_unit_io_alu_Control; // @[Processor.scala 20:30 84:20]
+  assign reg_b_io_in = register_file_io_rd2; // @[Processor.scala 107:17]
+  assign shifter_io_sign_Imm = sign_extension_io_sign_Imm; // @[Processor.scala 112:25]
+  assign alu_io_SrcA = control_unit_io_ALUSrcA ? reg_a_io_out : pc_io_out; // @[Processor.scala 125:23]
+  assign alu_io_SrcB = _alu_io_SrcB_T ? reg_b_io_out : _alu_io_SrcB_T_6; // @[Mux.scala 101:16]
+  assign alu_io_ALUControl = control_unit_io_alu_Control; // @[Processor.scala 127:23]
   assign alu_out_clock = clock;
   assign alu_out_reset = reset;
-  assign alu_out_io_in = alu_io_ALUResult; // @[Processor.scala 152:17 43:27]
-  assign shifter_sign_imm_io_sign_Imm = _Instr[25:0]; // @[Processor.scala 166:43]
+  assign alu_out_io_in = alu_io_ALUResult; // @[Processor.scala 137:19]
+  assign shifter_sign_imm_io_sign_Imm = _Instr[25:0]; // @[Processor.scala 142:43]
+  always @(posedge clock) begin
+    if (reset) begin // @[Processor.scala 39:26]
+      _Instr <= 32'h0; // @[Processor.scala 39:26]
+    end else begin
+      _Instr <= instr_io_out; // @[Processor.scala 72:12]
+    end
+  end
+// Register and memory initialization
+`ifdef RANDOMIZE_GARBAGE_ASSIGN
+`define RANDOMIZE
+`endif
+`ifdef RANDOMIZE_INVALID_ASSIGN
+`define RANDOMIZE
+`endif
+`ifdef RANDOMIZE_REG_INIT
+`define RANDOMIZE
+`endif
+`ifdef RANDOMIZE_MEM_INIT
+`define RANDOMIZE
+`endif
+`ifndef RANDOM
+`define RANDOM $random
+`endif
+`ifdef RANDOMIZE_MEM_INIT
+  integer initvar;
+`endif
+`ifndef SYNTHESIS
+`ifdef FIRRTL_BEFORE_INITIAL
+`FIRRTL_BEFORE_INITIAL
+`endif
+initial begin
+  `ifdef RANDOMIZE
+    `ifdef INIT_RANDOM
+      `INIT_RANDOM
+    `endif
+    `ifndef VERILATOR
+      `ifdef RANDOMIZE_DELAY
+        #`RANDOMIZE_DELAY begin end
+      `else
+        #0.002 begin end
+      `endif
+    `endif
+`ifdef RANDOMIZE_REG_INIT
+  _RAND_0 = {1{`RANDOM}};
+  _Instr = _RAND_0[31:0];
+`endif // RANDOMIZE_REG_INIT
+  `endif // RANDOMIZE
+end // initial
+`ifdef FIRRTL_AFTER_INITIAL
+`FIRRTL_AFTER_INITIAL
+`endif
+`endif // SYNTHESIS
 endmodule

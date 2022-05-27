@@ -1,8 +1,9 @@
 package CPU
 
 import chisel3._
+import chisel3.util.experimental.loadMemoryFromFileInline
  
-class Memory extends Module {
+class Memory(memoryFile: String = "rams_init_file.data") extends Module {
     val io = IO(new Bundle {
         val MemWrite = Input(Bool())
         val addr = Input(UInt(32.W))
@@ -11,6 +12,11 @@ class Memory extends Module {
     })
 
     val ram = SyncReadMem(256, UInt(32.W))
+
+    if (memoryFile.trim().nonEmpty) {
+    loadMemoryFromFileInline(ram, memoryFile)
+    } 
+
     io.rd := DontCare
     val rdwrPort = ram(io.addr)
     when (io.MemWrite) {

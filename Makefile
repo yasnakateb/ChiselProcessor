@@ -65,4 +65,4 @@ processor:
 	$(SBT) "runMain CPU.ProcessorMain"
 
 processor-test:
-	$(SBT) "testOnly CPU.ProcessorTest"
+	$(SBT) "testOnly CPU.ProcessorTest -- -DwriteVcd=1"

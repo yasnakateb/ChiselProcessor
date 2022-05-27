@@ -8,10 +8,16 @@
     "targetDir":"generated"
   },
   {
+    "class":"firrtl.annotations.MemoryFileInlineAnnotation",
+    "target":"~Memory|Memory>ram",
+    "filename":"../../../rams_init_file.data",
+    "hexOrBinary":"h"
+  },
+  {
     "class":"firrtl.transforms.CombinationalPath",
     "sink":"~Memory|Memory>io_rd",
     "sources":[
-      "~Memory|Memory>io_sig_MemWrite"
+      "~Memory|Memory>io_MemWrite"
     ]
   }
 ]
