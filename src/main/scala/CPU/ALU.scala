@@ -19,7 +19,7 @@ class ALU extends Module {
         val SrcB = Input(UInt(32.W))
         val ALUControl = Input(UInt(3.W))
         val ALUResult = Output(UInt(32.W))
-        val Zero = Output(Bool())    
+        val Zero = Output(Bool(true.B))    
         val over_flow = Output(Bool())    
     })
 

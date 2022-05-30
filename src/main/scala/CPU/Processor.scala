@@ -10,9 +10,9 @@ class Processor extends Module {
 
     val control_unit = Module (new ControlUnit())
     val pc = Module (new RegisterWithEnable())
-    val control_branch = Module (new ControlBranch())
-    val epc  = Module (new RegisterWithEnable())
-    val cause = Module (new RegisterWithEnable())
+    // val control_branch = Module (new ControlBranch())
+    // val epc  = Module (new RegisterWithEnable())
+    // val cause = Module (new RegisterWithEnable())
     val memory  = Module (new Memory())
     val instr  = Module (new RegisterWithEnable())
     val data  = Module (new Register())
@@ -25,7 +25,8 @@ class Processor extends Module {
     val alu_out  = Module (new Register())
     val shifter_sign_imm = Module (new ShifterSignImm())
     
-    pc.io.enable := control_branch.io.PCEn
+    var PCEn = (alu.io.Zero & control_unit.io.Branch) |  control_unit.io.PCWrite
+    pc.io.enable := PCEn 
     memory.io.addr := Mux(control_unit.io.IorD, alu_out.io.out, pc.io.out)
 
     memory.io.MemWrite := control_unit.io.MemWrite
@@ -59,18 +60,18 @@ class Processor extends Module {
     io.state := control_unit.io.state
     // _Pc_Src := control_unit.io.PCSrc
     
-    epc.io.enable := control_unit.io.EPCWrite
-    epc.io.in := pc.io.out
+    // epc.io.enable := control_unit.io.EPCWrite
+    // epc.io.in := pc.io.out
     // _Epc := epc.io.out 
 
     // _Int_Cause := Mux(control_unit.io.IntCause, "h28".U(32.W), "h30".U(32.W))
     
-    cause.io.enable := control_unit.io.CauseWrite
-    cause.io.in := Mux(control_unit.io.IntCause, "h28".U(32.W), "h30".U(32.W))
+    // cause.io.enable := control_unit.io.CauseWrite
+    // cause.io.in := Mux(control_unit.io.IntCause, "h28".U(32.W), "h30".U(32.W))
     
     // _Cause := cause.io.out
     _Instr := instr.io.out 
-    val _C0 = MuxCase("b00".U(2.W), Array((_Instr(15,11) === 13.U(5.W)) ->  cause.io.out, (_Instr(15,11) === 13.U(5.W)) ->  epc.io.out ))
+    // val _C0 = MuxCase("b00".U(2.W), Array((_Instr(15,11) === 13.U(5.W)) ->  cause.io.out, (_Instr(15,11) === 13.U(5.W)) ->  epc.io.out ))
     
     // _Adr 
 
@@ -93,7 +94,7 @@ class Processor extends Module {
     register_file.io.src1 := _Instr(25,21)
     register_file.io.src2 := _Instr(20,16)
     register_file.io.src3 := Mux(control_unit.io.RegDst, _Instr(15,11), _Instr(20,16))
-    register_file.io.wd := MuxCase("b0".U(32.W), Array((control_unit.io.MemtoReg === 0.U(2.W)) ->  alu_out.io.out, (control_unit.io.MemtoReg === 1.U(2.W)) ->  data.io.out, (control_unit.io.MemtoReg === 2.U(2.W)) ->  _C0, (control_unit.io.MemtoReg === 3.U(2.W)) ->  0.U(32.W)))
+    register_file.io.wd := MuxCase("b0".U(32.W), Array((control_unit.io.MemtoReg === 0.U(2.W)) ->  alu_out.io.out, (control_unit.io.MemtoReg === 1.U(2.W)) ->  data.io.out, (control_unit.io.MemtoReg === 3.U(2.W)) ->  0.U(32.W)))
     register_file.io.write_data := control_unit.io.RegWrite 
     // _Rd1 := register_file.io.rd1 
     // _Rd2 := register_file.io.rd2 
@@ -113,13 +114,12 @@ class Processor extends Module {
     // _Sign_Imm_Shifted := shifter.io.shifted_Sign_Imm
 
     // pc.io.enable <> control_branch.io.PCEn
-    pc.io.enable := true.B
+    
     val _Pc_Jump_Prime = shifter_sign_imm.io.shifted_Sign_Imm
 
     val _Pc_Jump = pc.io.out(31,28) ## _Pc_Jump_Prime(27,0)
 
-    pc.io.in := MuxCase("b0".U(32.W), Array((control_unit.io.PCSrc === 0.U(2.W)) ->  alu.io.ALUResult, (control_unit.io.PCSrc === 1.U(2.W)) ->  alu_out.io.out, (control_unit.io.PCSrc === 2.U(2.W)) ->  _Pc_Jump, (control_unit.io.PCSrc === 3.U(2.W)) ->  "h80000180".U(32.W)))
-
+    pc.io.in := MuxCase("b0".U(32.W), Array((control_unit.io.PCSrc === 0.U(2.W)) ->  alu.io.ALUResult, (control_unit.io.PCSrc === 1.U(2.W)) ->  alu_out.io.out, (control_unit.io.PCSrc === 2.U(2.W)) ->  _Pc_Jump))
     
     
     alu.io.SrcA := Mux(control_unit.io.ALUSrcA, reg_a.io.out, pc.io.out) 
@@ -129,10 +129,13 @@ class Processor extends Module {
     
     // _over_flow := alu.io.over_flow 
 
-    control_branch.io.PCWrite := control_unit.io.PCWrite 
-    control_branch.io.Branch := control_unit.io.Branch
+    // val  test = control_branch.io.PCWrite
+    // control_branch.io.PCWrite := control_unit.io.PCWrite 
+    // control_branch.io.Branch := control_unit.io.Branch
 
-    control_branch.io.Zero := alu.io.Zero 
+    // control_branch.io.Zero := alu.io.Zero 
+
+    
     
     alu_out.io.in := alu.io.ALUResult
     // _Alu_Out := alu_out.io.out 
@@ -140,6 +143,7 @@ class Processor extends Module {
     // _Pc_Prime := MuxCase("b0".U(32.W), Array((control_unit.io.PCSrc === 0.U(2.W)) ->  _Alu_Result, (control_unit.io.PCSrc === 1.U(2.W)) ->  _Alu_Out, (control_unit.io.PCSrc === 2.U(2.W)) ->  _Pc_Jump, (control_unit.io.PCSrc === 3.U(2.W)) ->  "h80000180".U(32.W)))
 
     shifter_sign_imm.io.sign_Imm := _Instr(25,0)
+    
     
 }
 
